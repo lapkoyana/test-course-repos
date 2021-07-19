@@ -6,17 +6,14 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 public class GitApi {
-	private String baseUrl;
-	
-	RequestSpecification requestSpecification = given()
-			   .baseUri("https://api.github.com");
-	
-	public String getBaseUrl() {
-		return baseUrl;
-	}
 
-	public void setBaseUrl(String baseUrl) {
+	private String baseUrl;
+
+	private RequestSpecification requestSpecification;
+
+	public GitApi(String baseUrl) {
 		this.baseUrl = baseUrl;
+		requestSpecification = given().baseUri(baseUrl);
 	}
 
 	public Response getResponse(String url) {
