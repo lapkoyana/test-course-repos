@@ -1,11 +1,24 @@
 package pack;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import static io.restassured.RestAssured.*;
+
+import pack.api.GitApi;
 
 public class ApiTests {
+	private String urlAllRepos = "/orgs/selenide/repos";
+	private String urlOneRepos = "/repos/selenide/selenide-ru";
+	private GitApi api = new GitApi("https://api.github.com");
+
 	@Test
 	public void repositoryListTest() {
-		given().when().get("https://api.github.com/orgs/selenide/repos").then().assertThat().statusCode(200);
+		Assertions.assertEquals(api.getStatusCode(urlAllRepos), 200);
+		Assertions.assertNotNull(api.getBody(urlAllRepos));
+	}
+
+	@Test
+	public void oneRepositoryTest() {
+		Assertions.assertEquals(api.getStatusCode(urlOneRepos), 200);
+		Assertions.assertNotNull(api.getBody(urlOneRepos));
 	}
 }
