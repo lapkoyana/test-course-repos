@@ -1,26 +1,25 @@
 package pack.api;
 
-import static io.restassured.RestAssured.when;
-import io.restassured.response.ResponseBody;
+import static io.restassured.RestAssured.*;
+
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 public class GitApi {
-
 	private String baseUrl;
+	
+	RequestSpecification requestSpecification = given()
+			   .baseUri("https://api.github.com");
+	
+	public String getBaseUrl() {
+		return baseUrl;
+	}
 
-	public GitApi(String baseUrl) {
+	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
 	}
 
-	public int getStatusCode(String url) {
-		int statusCode = when().get(baseUrl + url).getStatusCode();
-		System.out.println("Status code = " + statusCode);
-		return statusCode;
+	public Response getResponse(String url) {
+		return given().spec(requestSpecification).when().get(url);
 	}
-
-	public ResponseBody getBody(String url) {
-		ResponseBody body = when().get(baseUrl + url).getBody();
-		System.out.println("Response Body is: \n" + body.asString());// the body is too big
-		return body;
-	}
-
 }
