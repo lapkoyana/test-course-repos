@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import io.qameta.allure.Story;
 import pack.model.GitRepository;
 import pack.step.RepositoriesSteps;
 
@@ -19,6 +20,7 @@ public class RepositoriesTests {
 	RepositoriesSteps ts = new RepositoriesSteps();
 	static List<GitRepository> actualRepositories;
 
+	@Story("repoList")
 	@Test
 	@BeforeAll
 	public void getRepositoryListTest() {
@@ -27,6 +29,7 @@ public class RepositoriesTests {
 		Assertions.assertTrue(actualRepositories.size() > 0, "the repository list is empty");
 	}
 
+	@Story("oneRepo")
 	@ParameterizedTest
 	@MethodSource("getAllRepsNamesAsList")
 	public void getRepositoryTest(String repoName) {
