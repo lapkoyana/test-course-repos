@@ -1,7 +1,10 @@
 package pack;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.qameta.allure.Allure;
+import io.restassured.response.Response;
 import pack.step.RepositoriesSteps;
 
 public class RepositoriesTests {
@@ -10,7 +13,9 @@ public class RepositoriesTests {
 
 	@Test
 	public void repositoryListTest() {
-		ts.getAllReps("selenide");
+		Response response = ts.getAllReps("selenide");
+		Assertions.assertNotNull(response.body());
+		Allure.addAttachment("Тело", response.body().asString());
 	}
 
 }
