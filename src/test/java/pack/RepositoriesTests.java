@@ -1,26 +1,51 @@
 package pack;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.List;
 
-import io.restassured.response.Response;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import pack.model.GitRepository;
 import pack.step.RepositoriesSteps;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RepositoriesTests {
 
 	RepositoriesSteps ts = new RepositoriesSteps();
+	static List<GitRepository> actualRepositories;
 
-	@Test
+	@BeforeAll
 	public void getRepositoryListTest() {
-		Response response = ts.getAllReps("selenide");
+		actualRepositories = ts.getAllReps("selenide");
+		System.out.println(actualRepositories);
 
-		Assertions.assertNotNull(response.body());
+		Assertions.assertTrue(actualRepositories.size() > 0, "the repository list is empty");
+		System.out.println("после getRepositoryListTest");
 	}
 
-	@Test
-	public void getRepositoryTest() {
-		Response response = ts.getRepository("selenide", "selenide-ru");
+	@ParameterizedTest
+	@MethodSource("getAllRepsNamesAsList")
+	public void getRepositoryTest(String repoName) {
+		System.out.println("до getRepositoryTest");
 
-		Assertions.assertNotNull(response.body());
+		GitRepository currentRepository = ts.getRepository("selenide", repoName);
+
+		String fullName = currentRepository.getFullName();
+
+		Assertions.assertTrue(currentRepository.getFullName() != null, "repository is not found");
+		Assertions.assertEquals(fullName, "selenide/selenide-ru", "fullName does not match the intended");
+		System.out.println("после getRepositoryTest");
+	}
+
+	private static List<String> getAllRepsNamesAsList() {
+		List<String> allNames = new ArrayList<>();
+
+		actualRepositories.forEach(gr -> allNames.add(gr.getName()));
+
+		return allNames;
 	}
 }
