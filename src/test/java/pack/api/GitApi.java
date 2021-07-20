@@ -2,19 +2,14 @@ package pack.api;
 
 import static io.restassured.RestAssured.*;
 
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 public class GitApi {
 
-	private String baseUrl;
-
-	private RequestSpecification requestSpecification;
-
-	public GitApi(String baseUrl) {
-		this.baseUrl = baseUrl;
-		requestSpecification = given().baseUri(baseUrl);
-	}
+	private final RequestSpecification requestSpecification = new RequestSpecBuilder()
+			.setBaseUri("https://api.github.com").build();
 
 	public Response getResponse(String url) {
 		return given().spec(requestSpecification).when().get(url);
