@@ -15,7 +15,6 @@ import pack.model.GitRepository;
 public class RepositoriesSteps {
 
 	private GitApi api = new GitApi();
-	private UrlInfo urlInfo = new UrlInfo();
 
 	@Step("ѕолучение списка всех репозиториев организации {org}")
 	public List<GitRepository> getAllReps(String org) {
@@ -52,7 +51,7 @@ public class RepositoriesSteps {
 	}
 
 	private void repoAttachments(String url, Response response, String body) {
-		Allure.addAttachment("url", urlInfo.url + url);
+		Allure.addAttachment("url", UrlInfo.getInstance().getProperties().getProperty("URL") + url);
 		Allure.addAttachment("status code", String.valueOf(response.statusCode()));
 		Allure.addAttachment("body", body);
 	}
